@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29926.136
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMDEditor", "VMDEditor.csproj", "{3BE3DB29-E5F2-46F9-B5CF-BB038B32CAF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMDEditor", "VMDEditor.csproj", "{253370EA-5DF2-4124-921E-B483D2BE19A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3BE3DB29-E5F2-46F9-B5CF-BB038B32CAF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BE3DB29-E5F2-46F9-B5CF-BB038B32CAF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BE3DB29-E5F2-46F9-B5CF-BB038B32CAF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BE3DB29-E5F2-46F9-B5CF-BB038B32CAF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{253370EA-5DF2-4124-921E-B483D2BE19A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{253370EA-5DF2-4124-921E-B483D2BE19A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{253370EA-5DF2-4124-921E-B483D2BE19A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{253370EA-5DF2-4124-921E-B483D2BE19A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7F1F755B-96C7-48BE-8B5B-D1E05FBF3A16}
+		SolutionGuid = {6C6A99F3-F30C-4AA2-90D7-68BD010FF816}
 	EndGlobalSection
 EndGlobal

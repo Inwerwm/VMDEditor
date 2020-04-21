@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMDEditor", "VMDEditor.csproj", "{253370EA-5DF2-4124-921E-B483D2BE19A9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76341E6E-6FAD-47BB-9077-5C1C959648BE}"
+	ProjectSection(SolutionItems) = preProject
+		設計.md = 設計.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

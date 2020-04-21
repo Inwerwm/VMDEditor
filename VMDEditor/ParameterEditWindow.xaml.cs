@@ -18,11 +18,24 @@ namespace VMDEditor
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+
+
+    public partial class ParameterEditWindow : Window
     {
-        public MainWindow()
+        ViewModel vm = new ViewModel();
+
+        private TimeLineWindow timeLineWindow;
+
+        public ParameterEditWindow()
         {
             InitializeComponent();
+            Loaded += (s, e) => { timeLineWindow.Owner = this; };
+
+            DataContext = vm;
+
+            timeLineWindow = new TimeLineWindow(vm);
+
+            vm.IsTimeLineWindowVisible.Subscribe(v => timeLineWindow.Visibility = v ? Visibility.Visible : Visibility.Hidden);
         }
     }
 }

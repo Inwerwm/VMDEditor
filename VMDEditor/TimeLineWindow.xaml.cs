@@ -1,11 +1,13 @@
 ﻿using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -52,18 +54,28 @@ namespace VMDEditor
             if (!vm.AddArticle(name))
                 return false;
 
-            var rect = new Rectangle();
-            rect.Height = Constants.ARTICLE_ROW_HEIGHT;
-            rect.Width = 100;
-            rect.Fill = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            Binding binding = new Binding("TimelineLength.Value");
+            binding.Source = vm;
+            
+            var line = new Line();
+            line.X1 = 0;
+            line.SetBinding(Line.X2Property, binding);
+            line.Y1 = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
+            line.Y2 = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
+            line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            line.StrokeThickness = 1;
 
             CanvasTimeLine.Height = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
-            CanvasTimeLine.Children.Add(rect);
-            Canvas.SetLeft(rect, 0);
-            Canvas.SetTop(rect, (vm.Articles.Count - 1) * Constants.ARTICLE_ROW_HEIGHT);
-
+            CanvasTimeLine.Children.Add(line);
 
             return true;
+        }
+
+        private void WindowTimeLine_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var spaceWidth = (int)Math.Ceiling(TimeLineColumn.ActualWidth);
+            if (vm.TimelineLength.Value < spaceWidth)
+                vm.TimelineLength.Value = spaceWidth;
         }
     }
 }

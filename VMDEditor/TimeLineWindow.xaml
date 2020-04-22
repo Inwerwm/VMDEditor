@@ -3,32 +3,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:VMDEditor"
         mc:Ignorable="d"
-        Title="TimeLine" Height="282" Width="800" Closing="WindowTimeLine_Closing">
+        Title="TimeLine" Height="282" Width="500" Closing="WindowTimeLine_Closing" SizeChanged="WindowTimeLine_SizeChanged">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="FrameRow" Height="30"/>
-            <RowDefinition x:Name="TimeLineRow" Height="*"/>
+            <RowDefinition x:Name="FrameRow" Height="30" MinHeight="30"/>
+            <RowDefinition x:Name="TimeLineRow" Height="*" MinHeight="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="ArticleColumn" MinWidth="50"/>
-            <ColumnDefinition x:Name="TimeLineColumn" Width="9*"/>
+            <ColumnDefinition x:Name="ArticleColumn" MinWidth="100"/>
+            <ColumnDefinition x:Name="TimeLineColumn" Width="9*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer x:Name="ScrollFrame" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="0">
-
+            <Canvas x:Name="CanvasRuler" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="{Binding TimelineLength.Value}"/>
+            <i:Interaction.Behaviors>
+                <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollH" Orientation="Horizontal" />
+            </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollArticle" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" Grid.Column="0" Margin="0,0,0,0" Grid.Row="1">
             <ListBox ItemsSource="{Binding Articles}" SelectedItem="{Binding SelectedArticle.Value}" SelectedIndex="{Binding SelectedArticleIndex.Value}" BorderThickness="0" Background="WhiteSmoke">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Value.Name}" Height="{Binding ArticleRowHeight}"/>
+                        <TextBlock Text="{Binding Value.Name}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="{Binding Value.ArticleRowHeight}"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
+            <i:Interaction.Behaviors>
+                <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollV" Orientation="Vertical" />
+            </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollTimeLine" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="1">
-            <Canvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Canvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding TimelineLength.Value}"/>
+            <i:Interaction.Behaviors>
+                <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollV" Orientation="Vertical" />
+                <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollH" Orientation="Horizontal" />
+            </i:Interaction.Behaviors>
         </ScrollViewer>
         <Button x:Name="AddArticleButton" Content="項目の追加" Grid.Column="0" Grid.Row="0" Margin="4,4,4,4" Click="AddArticleButton_Click"/>
     </Grid>

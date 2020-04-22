@@ -20,14 +20,19 @@ namespace VMDEditor
 
         public ReactiveProperty<ReactiveProperty<Article>> SelectedArticle { get; }
         public ReactiveProperty<int> SelectedArticleIndex { get; }
+        public ReactiveProperty<int> TimelineLength { get; }
         public ReactiveProperty<bool> IsTimeLineWindowVisible { get; }
 
         public ReactiveCollection<ReactiveProperty<Article>> Articles { get; }
+
+        // Binding用
+        public static int ArticleRowHeight { get; } = Constants.ARTICLE_ROW_HEIGHT;
 
         public ViewModel()
         {
             SelectedArticle = new ReactiveProperty<ReactiveProperty<Article>>().AddTo(Disposable);
             SelectedArticleIndex = new ReactiveProperty<int>().AddTo(Disposable);
+            TimelineLength = new ReactiveProperty<int>(1000).AddTo(Disposable);
             IsTimeLineWindowVisible = new ReactiveProperty<bool>(true).AddTo(Disposable);
             
             Articles = new ReactiveCollection<ReactiveProperty<Article>>().AddTo(Disposable);

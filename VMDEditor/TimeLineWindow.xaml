@@ -8,21 +8,28 @@
         Title="TimeLine" Height="282" Width="800" Closing="WindowTimeLine_Closing">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="FrameRow" Height="13*"/>
-            <RowDefinition Height="120*"/>
+            <RowDefinition x:Name="FrameRow" Height="30"/>
+            <RowDefinition x:Name="TimeLineRow" Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="ArticleColumn"/>
-            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition x:Name="ArticleColumn" MinWidth="50"/>
+            <ColumnDefinition x:Name="TimeLineColumn" Width="9*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer x:Name="FrameScroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" Grid.Column="1" Grid.Row="0">
-            
-        </ScrollViewer>
-        <ScrollViewer x:Name="ArticleScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Grid.Column="0" Grid.Row="1">
+        <ScrollViewer x:Name="ScrollFrame" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="0">
 
         </ScrollViewer>
-        <ScrollViewer x:Name="TimeLineScroll" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="1">
-
+        <ScrollViewer x:Name="ScrollArticle" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" Grid.Column="0" Margin="0,0,0,0" Grid.Row="1">
+            <ListBox ItemsSource="{Binding Articles}" SelectedItem="{Binding SelectedArticle.Value}" SelectedIndex="{Binding SelectedArticleIndex.Value}" BorderThickness="0" Background="WhiteSmoke">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Value.Name}" Height="{Binding ArticleRowHeight}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </ScrollViewer>
+        <ScrollViewer x:Name="ScrollTimeLine" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="1">
+            <Canvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </ScrollViewer>
+        <Button x:Name="AddArticleButton" Content="項目の追加" Grid.Column="0" Grid.Row="0" Margin="4,4,4,4" Click="AddArticleButton_Click"/>
     </Grid>
 </Window>

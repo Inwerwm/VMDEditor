@@ -14,4 +14,13 @@ namespace VMDEditor
     public partial class App : Application
     {
     }
+
+    /// <summary>
+    /// 定数の静的クラス
+    /// </summary>
+    public static class Constants
+    {
+        public static readonly int ARTICLE_ROW_HEIGHT = 20;
+        public static readonly int FRAME_DISPLAY_INTERVAL = 5;
+    }
 }

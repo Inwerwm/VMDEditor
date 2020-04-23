@@ -34,7 +34,7 @@ namespace VMDEditor
             binding.Mode = BindingMode.OneWay;
 
             var line = new Line();
-            line.X1 = 0;
+            line.X1 = -1 * ViewModel.TimeLineMargin.Left;
             line.SetBinding(Line.X2Property, binding);
             line.Y1 = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
             line.Y2 = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
@@ -58,10 +58,11 @@ namespace VMDEditor
 
             for (; NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL < CanvasTimeLine.ActualWidth; NumberOfLinesDrawn++)
             {
+                //タイムラインのキャンバスにフレーム数の縦線を追加
                 var line = new Line();
                 line.X1 = NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL;
                 line.X2 = NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL;
-                line.Y1 = 0;
+                line.Y1 = -1 * ViewModel.TimeLineMargin.Left;
                 line.SetBinding(Line.Y2Property, binding);
                 line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                 line.Stroke.Freeze();
@@ -69,6 +70,19 @@ namespace VMDEditor
                 Panel.SetZIndex(line, 2);
 
                 CanvasTimeLine.Children.Add(line);
+
+                //5の倍数の時ルーラーキャンパスにフレーム数の数字を追加
+                if(NumberOfLinesDrawn % 5 == 0)
+                {
+                    var num = new TextBlock();
+                    num.Text = NumberOfLinesDrawn.ToString();
+                    // numの領域大を計算させる
+                    num.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+
+                    CanvasRuler.Children.Add(num);
+                    Canvas.SetBottom(num, 0);
+                    Canvas.SetLeft(num, NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL - num.DesiredSize.Width / 2);
+                }
             }
         }
 

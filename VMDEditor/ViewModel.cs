@@ -26,8 +26,10 @@ namespace VMDEditor
 
         public ReactiveCollection<ReactiveProperty<Article>> Articles { get; }
 
-        // Binding用
+        // Binding用定数
         public static int ArticleRowHeight { get; } = Constants.ARTICLE_ROW_HEIGHT;
+        public static int RulerRowHeight { get; } = 50;
+        public static Thickness TimeLineMargin { get; } = new Thickness(10, 0, 0, 0);
 
         public ViewModel()
         {
@@ -55,5 +57,18 @@ namespace VMDEditor
         }
 
         public void Dispose() => Disposable.Dispose();
+    }
+
+    public class MinusConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return -1 * (double)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return -1 * (double)value;
+        }
     }
 }

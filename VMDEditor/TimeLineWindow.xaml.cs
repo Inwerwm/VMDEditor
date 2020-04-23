@@ -117,5 +117,17 @@ namespace VMDEditor
                 DrawFrameLine();
             }
         }
+
+        private void WindowTimeLine_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = e.Data.GetDataPresent(DataFormats.FileDrop);
+        }
+
+        private void WindowTimeLine_Drop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            vm.LoadVMD(files);
+        }
     }
 }

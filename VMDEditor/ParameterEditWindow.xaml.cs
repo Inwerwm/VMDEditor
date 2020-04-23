@@ -37,5 +37,17 @@ namespace VMDEditor
 
             vm.IsTimeLineWindowVisible.Subscribe(v => timeLineWindow.Visibility = v ? Visibility.Visible : Visibility.Hidden);
         }
+
+        private void WindowParameterEdit_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = e.Data.GetDataPresent(DataFormats.FileDrop);
+        }
+
+        private void WindowParameterEdit_Drop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            vm.LoadVMD(files);
+        }
     }
 }

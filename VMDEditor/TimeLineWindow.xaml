@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:VMDEditor"
         mc:Ignorable="d"
-        Title="TimeLine" Height="300" Width="500" Closing="WindowTimeLine_Closing" SizeChanged="WindowTimeLine_SizeChanged">
+        Title="TimeLine" Height="300" Width="500" Closing="WindowTimeLine_Closing" SizeChanged="WindowTimeLine_SizeChanged" AllowDrop="True" PreviewDragOver="WindowTimeLine_PreviewDragOver" Drop="WindowTimeLine_Drop">
     <Window.Resources>
         <local:MinusConverter x:Key="MinusConverter"/>
     </Window.Resources>

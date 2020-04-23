@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VMDEditor"
         mc:Ignorable="d"
-        Title="VMD Editor" Height="450" Width="800">
+        Title="VMD Editor" Height="450" Width="800" AllowDrop="True" PreviewDragOver="WindowParameterEdit_PreviewDragOver" Drop="WindowParameterEdit_Drop">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

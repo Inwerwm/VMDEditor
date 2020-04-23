@@ -56,6 +56,11 @@ namespace VMDEditor
             return true;
         }
 
+        public void LoadVMD(string[] paths)
+        {
+
+        }
+
         public void Dispose() => Disposable.Dispose();
     }
 

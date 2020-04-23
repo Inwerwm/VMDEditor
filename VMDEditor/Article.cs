@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reactive.Disposables;
 using System.Text;
 using MikuMikuMethods.Vmd;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace VMDEditor
 {
@@ -11,11 +15,14 @@ namespace VMDEditor
         Morph
     }
 
-    public class Article
+    public class Article : INotifyPropertyChanged, IDisposable
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public CompositeDisposable Disposable { get; } = new CompositeDisposable();
+
         public string Name { get; set; }
         public ArticleType Type { get; private set; }
-        public List<IVmdModelFrameData> Keys { get; } = new List<IVmdModelFrameData>();
+        public ReactiveCollection<Key> Keys { get; }
 
         // Binding用
         public static int ArticleRowHeight { get; } = Constants.ARTICLE_ROW_HEIGHT;
@@ -24,6 +31,25 @@ namespace VMDEditor
         {
             Name = name;
             Type = type;
+            Keys = new ReactiveCollection<Key>().AddTo(Disposable);
         }
+        public void Dispose() => Disposable.Dispose();
+    }
+
+    public class Key : INotifyPropertyChanged, IDisposable
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public CompositeDisposable Disposable { get; } = new CompositeDisposable();
+
+        public ReactiveProperty<IVmdFrameData> Frame { get; }
+        public ReactiveProperty<bool> IsVirtual { get; }
+
+        public Key(IVmdFrameData f)
+        {
+            Frame = new ReactiveProperty<IVmdFrameData>(f).AddTo(Disposable);
+            IsVirtual = new ReactiveProperty<bool>().AddTo(Disposable);
+        }
+
+        public void Dispose() => Disposable.Dispose();
     }
 }

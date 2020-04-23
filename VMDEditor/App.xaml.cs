@@ -22,6 +22,6 @@ namespace VMDEditor
     {
         public static readonly int ARTICLE_ROW_HEIGHT = 20;
 
-        public static readonly int FRAME_DISPLAY_INTERVAL = 5;
+        public static readonly int FRAME_DISPLAY_INTERVAL = 10;
     }
 }

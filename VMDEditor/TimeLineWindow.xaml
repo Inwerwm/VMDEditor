@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:VMDEditor"
         mc:Ignorable="d"
-        Title="TimeLine" Height="282" Width="500" Closing="WindowTimeLine_Closing" SizeChanged="WindowTimeLine_SizeChanged">
+        Title="TimeLine" Height="300" Width="500" Closing="WindowTimeLine_Closing" SizeChanged="WindowTimeLine_SizeChanged">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="FrameRow" Height="30" MinHeight="30"/>
@@ -17,21 +17,21 @@
             <ColumnDefinition x:Name="TimeLineColumn" Width="9*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer x:Name="ScrollFrame" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="0">
-            <Canvas x:Name="CanvasRuler" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="{Binding TimelineLength.Value}"/>
+            <Canvas x:Name="CanvasRuler" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="{Binding TimelineLength.Value, Mode=OneWay}"/>
             <i:Interaction.Behaviors>
                 <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollH" Orientation="Horizontal" />
             </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollArticle" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" Grid.Column="0" Margin="0,0,0,0" Grid.Row="1">
-            <ListBox ItemsSource="{Binding Articles}" SelectedItem="{Binding SelectedArticle.Value}" SelectedIndex="{Binding SelectedArticleIndex.Value}" BorderThickness="0" Background="WhiteSmoke">
+            <ListBox ItemsSource="{Binding Articles, Mode=OneWay}" SelectedItem="{Binding SelectedArticle.Value}" SelectedIndex="{Binding SelectedArticleIndex.Value}" BorderThickness="0" Background="WhiteSmoke">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Value.Name}"/>
+                        <TextBlock Text="{Binding Value.Name, Mode=OneWay}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Height" Value="{Binding Value.ArticleRowHeight}"/>
+                        <Setter Property="Height" Value="{Binding Value.ArticleRowHeight, Mode=OneWay}"/>
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
@@ -40,7 +40,7 @@
             </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollTimeLine" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="1">
-            <Canvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding TimelineLength.Value}"/>
+            <Canvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding TimelineLength.Value, Mode=OneWay}" Height="{Binding TimelineHeight.Value, Mode=OneWay}"/>
             <i:Interaction.Behaviors>
                 <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollV" Orientation="Vertical" />
                 <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollH" Orientation="Horizontal" />

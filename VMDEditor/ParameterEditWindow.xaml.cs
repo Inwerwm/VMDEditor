@@ -36,6 +36,8 @@ namespace VMDEditor
             timeLineWindow = new TimeLineWindow(vm);
 
             vm.IsTimeLineWindowVisible.Subscribe(v => timeLineWindow.Visibility = v ? Visibility.Visible : Visibility.Hidden);
+
+            vm.setWindow(this, timeLineWindow);
         }
 
         private void WindowParameterEdit_PreviewDragOver(object sender, DragEventArgs e)
@@ -47,7 +49,13 @@ namespace VMDEditor
         private void WindowParameterEdit_Drop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            vm.LoadVMD(files);
+            if(files.Count() > 1)
+            {
+                MessageBox.Show("投入するファイルは1つだけにしてください。");
+                return;
+            }
+
+            vm.LoadVMD(files[0]);
         }
     }
 }

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Shapes;
+using MikuMikuMethods.Vmd;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -17,6 +19,9 @@ namespace VMDEditor
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public CompositeDisposable Disposable { get; } = new CompositeDisposable();
+        private Model M = new Model();
+        private ParameterEditWindow PE;
+        private TimeLineWindow TL;
 
         public ReactiveProperty<ReactiveProperty<Article>> SelectedArticle { get; }
         public ReactiveProperty<int> SelectedArticleIndex { get; }
@@ -33,6 +38,9 @@ namespace VMDEditor
 
         public ViewModel()
         {
+            // Shift-JISエンコードを使うための文
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             SelectedArticle = new ReactiveProperty<ReactiveProperty<Article>>().AddTo(Disposable);
             SelectedArticleIndex = new ReactiveProperty<int>().AddTo(Disposable);
             TimelineLength = new ReactiveProperty<int>(1000).AddTo(Disposable);
@@ -40,6 +48,12 @@ namespace VMDEditor
             IsTimeLineWindowVisible = new ReactiveProperty<bool>(true).AddTo(Disposable);
             
             Articles = new ReactiveCollection<ReactiveProperty<Article>>().AddTo(Disposable);
+        }
+
+        public void setWindow(ParameterEditWindow parameterEditW, TimeLineWindow timeLineW)
+        {
+            PE = parameterEditW;
+            TL = timeLineW;
         }
 
         /// <summary>
@@ -56,9 +70,16 @@ namespace VMDEditor
             return true;
         }
 
-        public void LoadVMD(string[] paths)
+        public void LoadVMD(string path)
         {
-
+            M.ReadVMD(path);
+            var articles = M.GetArticles();
+            Articles.Clear();
+            foreach (var a in articles)
+            {
+                Articles.Add(new ReactiveProperty<Article>(a).AddTo(Disposable));
+            }
+            TL.DrawArticleLine();
         }
 
         public void Dispose() => Disposable.Dispose();

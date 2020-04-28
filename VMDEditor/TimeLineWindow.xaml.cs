@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -13,7 +16,8 @@ namespace VMDEditor
     public partial class TimeLineWindow : Window
     {
         ViewModel vm;
-        int NumberOfLinesDrawn = 0;
+        Stack<Line> ArticleLines = new Stack<Line>();
+        int NumberOfFrameLinesDrawn = 0;
 
         public TimeLineWindow(ViewModel viewModel)
         {
@@ -29,25 +33,32 @@ namespace VMDEditor
             if (!vm.AddArticle(name))
                 return false;
 
-            Binding binding = new Binding("TimelineLength.Value");
-            binding.Source = vm;
-            binding.Mode = BindingMode.OneWay;
-
-            var line = new Line();
-            line.X1 = -1 * ViewModel.TimeLineMargin.Left;
-            line.SetBinding(Line.X2Property, binding);
-            line.Y1 = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
-            line.Y2 = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
-            line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            line.Stroke.Freeze();
-            line.StrokeThickness = 1;
-            Panel.SetZIndex(line, 3);
-
-            if (CanvasTimeLine.ActualHeight < vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT)
-                vm.TimelineHeight.Value = vm.Articles.Count * Constants.ARTICLE_ROW_HEIGHT;
-            CanvasTimeLine.Children.Add(line);
-
+            DrawArticleLine();
             return true;
+        }
+
+        public void DrawArticleLine()
+        {
+            while (vm.Articles.Count > ArticleLines.Count)
+            {
+                Binding binding = new Binding("TimelineLength.Value");
+                binding.Source = vm;
+                binding.Mode = BindingMode.OneWay;
+
+                var line = new Line();
+                line.X1 = -1 * ViewModel.TimeLineMargin.Left;
+                line.SetBinding(Line.X2Property, binding);
+                line.Y1 = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
+                line.Y2 = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
+                line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                line.Stroke.Freeze();
+                line.StrokeThickness = 1;
+                Panel.SetZIndex(line, 3);
+
+                vm.TimelineHeight.Value = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
+                CanvasTimeLine.Children.Add(line);
+                ArticleLines.Push(line);
+            }
         }
 
         private void DrawFrameLine()
@@ -56,12 +67,12 @@ namespace VMDEditor
             binding.Source = vm;
             binding.Mode = BindingMode.OneWay;
 
-            for (; NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL < CanvasTimeLine.ActualWidth; NumberOfLinesDrawn++)
+            for (; NumberOfFrameLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL < CanvasTimeLine.ActualWidth; NumberOfFrameLinesDrawn++)
             {
                 //タイムラインのキャンバスにフレーム数の縦線を追加
                 var line = new Line();
-                line.X1 = NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL;
-                line.X2 = NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL;
+                line.X1 = NumberOfFrameLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL;
+                line.X2 = NumberOfFrameLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL;
                 line.Y1 = -1 * ViewModel.TimeLineMargin.Left;
                 line.SetBinding(Line.Y2Property, binding);
                 line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
@@ -72,16 +83,16 @@ namespace VMDEditor
                 CanvasTimeLine.Children.Add(line);
 
                 //5の倍数の時ルーラーキャンパスにフレーム数の数字を追加
-                if(NumberOfLinesDrawn % 5 == 0)
+                if(NumberOfFrameLinesDrawn % 5 == 0)
                 {
                     var num = new TextBlock();
-                    num.Text = NumberOfLinesDrawn.ToString();
+                    num.Text = NumberOfFrameLinesDrawn.ToString();
                     // numの領域大を計算させる
                     num.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
 
                     CanvasRuler.Children.Add(num);
                     Canvas.SetBottom(num, 0);
-                    Canvas.SetLeft(num, NumberOfLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL - num.DesiredSize.Width / 2);
+                    Canvas.SetLeft(num, NumberOfFrameLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL - num.DesiredSize.Width / 2);
                 }
             }
         }
@@ -127,7 +138,12 @@ namespace VMDEditor
         private void WindowTimeLine_Drop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            vm.LoadVMD(files);
+            if (files.Count() > 1)
+            {
+                MessageBox.Show("投入するファイルは1つだけにしてください。");
+                return;
+            }
+            vm.LoadVMD(files[0]);
         }
     }
 }

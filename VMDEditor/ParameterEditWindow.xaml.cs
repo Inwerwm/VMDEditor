@@ -57,5 +57,11 @@ namespace VMDEditor
 
             vm.LoadVMD(files[0]);
         }
+
+        private void ButtonDeleteArticle_Click(object sender, RoutedEventArgs e)
+        {
+            vm.Articles.Remove(vm.SelectedArticle.Value);
+            timeLineWindow.DeleteArticleLine();
+        }
     }
 }

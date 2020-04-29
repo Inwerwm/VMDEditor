@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace VMDEditor
 {
@@ -24,6 +25,7 @@ namespace VMDEditor
             InitializeComponent();
             vm = viewModel;
             DataContext = vm;
+            vm.TimelineLength.Subscribe(_ => DrawFrameLine());
             vm.TimelineHeight.Value = (int)Math.Ceiling(TimeLineRow.ActualHeight);
             Loaded += (s, e) => { DrawFrameLine(); };
         }
@@ -33,11 +35,14 @@ namespace VMDEditor
             if (!vm.AddArticle(name))
                 return false;
 
-            DrawArticleLine();
+            DrawArticleLines();
             return true;
         }
 
-        public void DrawArticleLine()
+        /// <summary>
+        /// 現在の項目数に合わせて横線を描画する
+        /// </summary>
+        public void DrawArticleLines()
         {
             while (vm.Articles.Count > ArticleLines.Count)
             {
@@ -48,17 +53,43 @@ namespace VMDEditor
                 var line = new Line();
                 line.X1 = -1 * ViewModel.TimeLineMargin.Left;
                 line.SetBinding(Line.X2Property, binding);
-                line.Y1 = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
-                line.Y2 = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
+                line.Y1 = (ArticleLines.Count + 1) * Constants.ARTICLE_ROW_HEIGHT;
+                line.Y2 = (ArticleLines.Count + 1) * Constants.ARTICLE_ROW_HEIGHT;
                 line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                 line.Stroke.Freeze();
                 line.StrokeThickness = 1;
-                Panel.SetZIndex(line, 3);
+                //Panel.SetZIndex(line, 0);
 
-                vm.TimelineHeight.Value = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
+                vm.TimelineHeight.Value = (ArticleLines.Count + 1) * Constants.ARTICLE_ROW_HEIGHT;
                 CanvasTimeLine.Children.Add(line);
                 ArticleLines.Push(line);
             }
+        }
+
+        /// <summary>
+        /// タイムラインの横線を1つ消去する
+        /// </summary>
+        public void DeleteArticleLine()
+        {
+            CanvasTimeLine.Children.Remove(ArticleLines.Pop());
+            vm.TimelineHeight.Value = ArticleLines.Count * Constants.ARTICLE_ROW_HEIGHT;
+        }
+
+        public void DrawKey(Key key)
+        {
+            var length = Constants.ARTICLE_ROW_HEIGHT / Math.Sqrt(2);
+            var rhombus = new Rectangle();
+            rhombus.Width = length;
+            rhombus.Height = length;
+            rhombus.Stroke = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+            rhombus.Fill = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            rhombus.RenderTransformOrigin = new Point(0.5, 0.5);
+            rhombus.RenderTransform = new RotateTransform(45);
+            //Panel.SetZIndex(rhombus, 3);
+            CanvasTimeLine.Children.Add(rhombus);
+            Canvas.SetLeft(rhombus, key.Frame.Value.FrameTime * Constants.FRAME_DISPLAY_INTERVAL - Constants.ARTICLE_ROW_HEIGHT / Math.Sqrt(2) / 2);
+            Canvas.SetTop(rhombus, key.Parent.Row.Value * Constants.ARTICLE_ROW_HEIGHT + 2);
+            key.Rhombus = rhombus;
         }
 
         private void DrawFrameLine()
@@ -67,7 +98,8 @@ namespace VMDEditor
             binding.Source = vm;
             binding.Mode = BindingMode.OneWay;
 
-            for (; NumberOfFrameLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL < CanvasTimeLine.ActualWidth; NumberOfFrameLinesDrawn++)
+            // 縦線が現在のタイムラインのキャンバスの横幅まで敷き詰められていなければ敷き詰める
+            for (; NumberOfFrameLinesDrawn * Constants.FRAME_DISPLAY_INTERVAL < vm.TimelineLength.Value * Constants.FRAME_DISPLAY_INTERVAL; NumberOfFrameLinesDrawn++)
             {
                 //タイムラインのキャンバスにフレーム数の縦線を追加
                 var line = new Line();
@@ -78,7 +110,7 @@ namespace VMDEditor
                 line.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                 line.Stroke.Freeze();
                 line.StrokeThickness = 1;
-                Panel.SetZIndex(line, 2);
+                //Panel.SetZIndex(line, 1);
 
                 CanvasTimeLine.Children.Add(line);
 
@@ -125,7 +157,6 @@ namespace VMDEditor
             if (vm.TimelineLength.Value < spaceWidth)
             {
                 vm.TimelineLength.Value = spaceWidth;
-                DrawFrameLine();
             }
         }
 

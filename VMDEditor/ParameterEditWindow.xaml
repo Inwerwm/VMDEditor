@@ -18,6 +18,8 @@
                 <MenuItem Header="タイムライン" IsCheckable="True" IsChecked="{Binding IsTimeLineWindowVisible.Value}"/>
             </MenuItem>
         </Menu>
-        <TextBox HorizontalAlignment="Left" Margin="60,49,0,0" Grid.Row="1" Text="{Binding SelectedArticle.Value.Value.Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="172"/>
+        <TextBox x:Name="TextBoxArticleName" HorizontalAlignment="Left" Margin="60,49,0,0" Grid.Row="1" Text="{Binding SelectedArticle.Value.Value.Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="172"/>
+        <Button x:Name="ButtonDeleteArticle" Content="Button" HorizontalAlignment="Left" Height="40" Margin="146,154,0,0" Grid.Row="1" VerticalAlignment="Top" Width="181" Click="ButtonDeleteArticle_Click"/>
+        <Label Content="{Binding SelectedArticle.Value.Value.Row.Value}" HorizontalAlignment="Left" Margin="60,18,0,0" Grid.Row="1" VerticalAlignment="Top"/>
     </Grid>
 </Window>

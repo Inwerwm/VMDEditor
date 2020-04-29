@@ -67,6 +67,7 @@ namespace VMDEditor
                 return false;
             
             Articles.Add(new ReactiveProperty<Article>(new Article(ArticleType.Bone, name)).AddTo(Disposable));
+            Articles.Last().Value.Row.Value = Articles.Count - 1;
             return true;
         }
 
@@ -75,11 +76,17 @@ namespace VMDEditor
             M.ReadVMD(path);
             var articles = M.GetArticles();
             Articles.Clear();
-            foreach (var a in articles)
+            foreach (var item in articles.Select((a,i)=>(a,i)))
             {
-                Articles.Add(new ReactiveProperty<Article>(a).AddTo(Disposable));
+                item.a.Row.Value = item.i;
+                Articles.Add(new ReactiveProperty<Article>(item.a).AddTo(Disposable));
+                foreach (var k in item.a.Keys)
+                {
+                    TL.DrawKey(k);
+                }
             }
-            TL.DrawArticleLine();
+            TL.DrawArticleLines();
+            TimelineLength.Value = Articles.Max(a => (int)a.Value.Keys.Max(k => k.Frame.Value.FrameTime)) * Constants.FRAME_DISPLAY_INTERVAL + Constants.ARTICLE_ROW_HEIGHT;
         }
 
         public void Dispose() => Disposable.Dispose();

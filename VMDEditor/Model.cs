@@ -31,7 +31,7 @@ namespace VMDEditor
                 var a = new Article(ArticleType.Morph, g.Key);
                 foreach (var f in g)
                 {
-                    a.Keys.Add(new Key(f));
+                    a.Keys.Add(new Key(a, f));
                 }
                 articles.Add(a);
             }
@@ -41,7 +41,7 @@ namespace VMDEditor
                 var a = new Article(ArticleType.Morph, g.Key);
                 foreach (var f in g)
                 {
-                    a.Keys.Add(new Key(f));
+                    a.Keys.Add(new Key(a, f));
                 }
                 articles.Add(a);
             }

@@ -61,7 +61,7 @@ namespace VMDEditor
         private void ButtonDeleteArticle_Click(object sender, RoutedEventArgs e)
         {
             vm.Articles.Remove(vm.SelectedArticle.Value);
-            timeLineWindow.DeleteArticleLine();
+            //timeLineWindow.DeleteArticleLine();
         }
     }
 }

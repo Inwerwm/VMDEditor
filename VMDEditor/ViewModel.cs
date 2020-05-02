@@ -25,8 +25,9 @@ namespace VMDEditor
 
         public ReactiveProperty<ReactiveProperty<Article>> SelectedArticle { get; }
         public ReactiveProperty<int> SelectedArticleIndex { get; }
-        public ReactiveProperty<int> TimelineLength { get; }
-        public ReactiveProperty<int> TimelineHeight { get; }
+        public ReactiveProperty<double> TimelineLength { get; }
+        public ReactiveProperty<double> TimelineWidth { get; }
+        public ReactiveProperty<double> TimelineHeight { get; }
         public ReactiveProperty<bool> IsTimeLineWindowVisible { get; }
 
         public ReactiveCollection<ReactiveProperty<Article>> Articles { get; }
@@ -34,7 +35,7 @@ namespace VMDEditor
         // Binding用定数
         public static int ArticleRowHeight { get; } = Constants.ARTICLE_ROW_HEIGHT;
         public static int RulerRowHeight { get; } = 50;
-        public static Thickness TimeLineMargin { get; } = new Thickness(10, 0, 0, 0);
+        public Thickness TimeLineMargin { get; } = new Thickness(Constants.ARTICLE_ROW_HEIGHT / 2, 0, 0, 0);
 
         public ViewModel()
         {
@@ -43,8 +44,9 @@ namespace VMDEditor
 
             SelectedArticle = new ReactiveProperty<ReactiveProperty<Article>>().AddTo(Disposable);
             SelectedArticleIndex = new ReactiveProperty<int>().AddTo(Disposable);
-            TimelineLength = new ReactiveProperty<int>(1000).AddTo(Disposable);
-            TimelineHeight = new ReactiveProperty<int>(0).AddTo(Disposable);
+            TimelineLength = new ReactiveProperty<double>(1000).AddTo(Disposable);
+            TimelineWidth = new ReactiveProperty<double>(0).AddTo(Disposable);
+            TimelineHeight = new ReactiveProperty<double>(0).AddTo(Disposable);
             IsTimeLineWindowVisible = new ReactiveProperty<bool>(true).AddTo(Disposable);
             
             Articles = new ReactiveCollection<ReactiveProperty<Article>>().AddTo(Disposable);
@@ -85,7 +87,7 @@ namespace VMDEditor
                     TL.DrawKey(k);
                 }
             }
-            TL.DrawArticleLines();
+            //TL.DrawArticleLines();
             TimelineLength.Value = Articles.Max(a => (int)a.Value.Keys.Max(k => k.Frame.Value.FrameTime)) * Constants.FRAME_DISPLAY_INTERVAL + Constants.ARTICLE_ROW_HEIGHT;
         }
 

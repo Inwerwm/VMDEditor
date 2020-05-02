@@ -20,7 +20,7 @@
             <ColumnDefinition x:Name="TimeLineColumn" Width="9*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer x:Name="ScrollFrame" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="0">
-            <Canvas x:Name="CanvasRuler" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="{Binding TimelineLength.Value, Mode=OneWay}" Margin="{Binding TimeLineMargin, Mode=OneTime}" Height="{Binding RulerRowHeight, Mode=OneTime}" ClipToBounds="True">
+            <Canvas x:Name="CanvasRuler" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="{Binding TimelineWidth.Value, Mode=OneWay}" Margin="{Binding TimeLineMargin, Mode=OneTime}" Height="{Binding RulerRowHeight, Mode=OneTime}">
                 <Line X1="{Binding TimeLineMargin.Left,Mode=OneTime,Converter={StaticResource MinusConverter}}" X2="{Binding TimelineLength.Value, Mode=OneWay}" Y1="{Binding RulerRowHeight, Mode=OneTime}" Y2="{Binding RulerRowHeight, Mode=OneTime}" StrokeThickness="1" Stroke="Black"/>
             </Canvas>
             <i:Interaction.Behaviors>
@@ -45,7 +45,7 @@
             </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollTimeLine" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="1">
-            <Canvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding TimelineLength.Value, Mode=OneWay}" Height="{Binding TimelineHeight.Value, Mode=OneWay}"  Margin="{Binding TimeLineMargin,Mode=OneTime}" ClipToBounds="True"/>
+            <local:FastCanvas x:Name="CanvasTimeLine" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding TimelineWidth.Value, Mode=OneWay}" Height="{Binding TimelineHeight.Value, Mode=OneWay}" ClipToBounds="True"/>
             <i:Interaction.Behaviors>
                 <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollV" Orientation="Vertical" />
                 <local:ScrollSyncronizingBehavior ScrollGroup="TimeLineScrollH" Orientation="Horizontal" />
